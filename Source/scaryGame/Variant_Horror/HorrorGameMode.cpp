@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
 #include "Engine/World.h"
+#include "HorrorCharacter.h"
 
 AHorrorGameMode::AHorrorGameMode()
 {
@@ -50,4 +51,43 @@ AActor* AHorrorGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
 	// no PlayerStarts in the level
 	return nullptr;
+}
+
+void AHorrorGameMode::RegisterCharacterForObjectives(AHorrorCharacter* HorrorCharacter)
+{
+	if (!HorrorCharacter || TrackedCharacter.Get() == HorrorCharacter)
+	{
+		return;
+	}
+
+	TrackedCharacter = HorrorCharacter;
+	HorrorCharacter->OnKeyCollected.AddUniqueDynamic(this, &AHorrorGameMode::OnAnyKeyCollected);
+
+	// in case a save was just loaded with keys already collected, check immediately
+	OnAnyKeyCollected(NAME_None);
+}
+
+void AHorrorGameMode::OnAnyKeyCollected(FName KeyID)
+{
+	if (bObjectivesComplete || RequiredKeyIDs.Num() == 0)
+	{
+		return;
+	}
+
+	const AHorrorCharacter* HorrorCharacter = TrackedCharacter.Get();
+	if (!HorrorCharacter)
+	{
+		return;
+	}
+
+	for (const FName& RequiredKeyID : RequiredKeyIDs)
+	{
+		if (!HorrorCharacter->HasKey(RequiredKeyID))
+		{
+			return;
+		}
+	}
+
+	bObjectivesComplete = true;
+	OnObjectivesComplete.Broadcast();
 }

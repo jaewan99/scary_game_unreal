@@ -8,6 +8,7 @@
 #include "scaryGameCameraManager.h"
 #include "HorrorCharacter.h"
 #include "HorrorUI.h"
+#include "HorrorGameMode.h"
 #include "scaryGame.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
@@ -40,9 +41,33 @@ void AHorrorPlayerController::OnPossess(APawn* aPawn)
 			}
 
 			HorrorUI->SetupCharacter(HorrorCharacter);
+
+			// reload the last checkpoint if this character fails to escape a grab
+			HorrorCharacter->OnGrabFailed.AddUniqueDynamic(this, &AHorrorPlayerController::OnCharacterGrabFailed);
+
+			// track this character's key collection toward the game mode's win condition
+			if (AHorrorGameMode* HorrorGameMode = GetWorld()->GetAuthGameMode<AHorrorGameMode>())
+			{
+				HorrorGameMode->RegisterCharacterForObjectives(HorrorCharacter);
+			}
+
+			// continue from the last save the first time a character is possessed this session
+			if (bAutoLoadOnPossess && !bHasAutoLoaded)
+			{
+				bHasAutoLoaded = true;
+				HorrorCharacter->LoadProgress(HorrorCharacter->DefaultSaveSlotName, HorrorCharacter->DefaultSaveUserIndex);
+			}
 		}
 	}
-	
+
+}
+
+void AHorrorPlayerController::OnCharacterGrabFailed()
+{
+	if (AHorrorCharacter* HorrorCharacter = Cast<AHorrorCharacter>(GetPawn()))
+	{
+		HorrorCharacter->LoadProgress(HorrorCharacter->DefaultSaveSlotName, HorrorCharacter->DefaultSaveUserIndex);
+	}
 }
 
 void AHorrorPlayerController::SetupInputComponent()

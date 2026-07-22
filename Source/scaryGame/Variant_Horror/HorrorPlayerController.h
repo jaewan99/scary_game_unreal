@@ -55,11 +55,22 @@ protected:
 	UPROPERTY(EditAnywhere, Config, Category = "Input|Touch Controls")
 	bool bForceTouchControls = false;
 
+	/** If true, automatically loads the possessed character's DefaultSaveSlotName (if it exists) the first time a character is possessed this session, letting the player continue where they left off */
+	UPROPERTY(EditAnywhere, Category = "Save")
+	bool bAutoLoadOnPossess = true;
+
+	/** True once the auto-load-on-possess check has run, so it doesn't repeat on every (re-)possess */
+	bool bHasAutoLoaded = false;
+
 	/** Gameplay Initialization */
 	virtual void BeginPlay() override;
 
 	/** Possessed pawn initialization */
 	virtual void OnPossess(APawn* aPawn) override;
+
+	/** Reloads the possessed character's last save when they fail to escape a grab, acting as a checkpoint respawn */
+	UFUNCTION()
+	void OnCharacterGrabFailed();
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
