@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BearTrap.h"
+#include "My_Content/Hazards/BearTrap.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
-#include "EnemyCharacter.h"
+#include "My_Content/Enemy/EnemyCharacter.h"
 #include "TimerManager.h"
 
 ABearTrap::ABearTrap()

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "EnemyAIController.h"
-#include "EnemyCharacter.h"
+#include "My_Content/Enemy/EnemyAIController.h"
+#include "My_Content/Enemy/EnemyCharacter.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISense_Sight.h"

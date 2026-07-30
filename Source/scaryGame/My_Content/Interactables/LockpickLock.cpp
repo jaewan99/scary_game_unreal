@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "LockpickLock.h"
+#include "My_Content/Interactables/LockpickLock.h"
 #include "Components/StaticMeshComponent.h"
 
 ALockpickLock::ALockpickLock()

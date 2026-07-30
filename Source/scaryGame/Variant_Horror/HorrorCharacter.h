@@ -10,6 +10,7 @@ class USpotLightComponent;
 class UInputAction;
 class ANoiseDecoyProjectile;
 class ABearTrap;
+class UInventoryComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateSprintMeterDelegate, float, Percentage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSprintStateChangedDelegate, bool, bSprinting);
@@ -35,7 +36,11 @@ class SCARYGAME_API AHorrorCharacter : public AscaryGameCharacter
 	/** Player light source */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	USpotLightComponent* SpotLight;
-	
+
+	/** Modular item storage. Keys (and, later, other collectibles) are held here rather than in bespoke fields on the character. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	UInventoryComponent* Inventory;
+
 protected:
 
 	/** Fire weapon input action */
@@ -169,10 +174,6 @@ protected:
 	/** How far to trace when interacting */
 	UPROPERTY(EditAnywhere, Category = "Interaction", meta = (ClampMin = "0.0", Units = "cm"))
 	float InteractDistance = 250.0f;
-
-	/** IDs of keys the player has collected */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction")
-	TArray<FName> CollectedKeys;
 
 	/** IDs of lore notes the player has collected */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction")
@@ -404,6 +405,10 @@ protected:
 	float GetEffectiveSprintSpeed() const;
 
 public:
+
+	/** Returns the player's modular inventory component */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
+	UInventoryComponent* GetInventory() const { return Inventory; }
 
 	/** Returns true if the player has collected the given key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Interaction")

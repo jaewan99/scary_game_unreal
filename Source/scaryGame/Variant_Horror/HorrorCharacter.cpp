@@ -10,13 +10,14 @@
 #include "EnhancedInputComponent.h"
 #include "InputAction.h"
 #include "CollisionQueryParams.h"
-#include "IInteractable.h"
+#include "My_Content/Interaction/IInteractable.h"
 #include "Perception/AISense_Hearing.h"
-#include "NoiseDecoyProjectile.h"
-#include "InteractableDoor.h"
-#include "EnemyCharacter.h"
-#include "BearTrap.h"
-#include "HorrorSaveGame.h"
+#include "My_Content/Items/NoiseDecoyProjectile.h"
+#include "My_Content/Interactables/InteractableDoor.h"
+#include "My_Content/Enemy/EnemyCharacter.h"
+#include "My_Content/Hazards/BearTrap.h"
+#include "My_Content/SaveGame/HorrorSaveGame.h"
+#include "My_Content/Inventory/InventoryComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 AHorrorCharacter::AHorrorCharacter()
@@ -31,6 +32,9 @@ AHorrorCharacter::AHorrorCharacter()
 	SpotLight->AttenuationRadius = 1050.0f;
 	SpotLight->InnerConeAngle = 18.7f;
 	SpotLight->OuterConeAngle = 45.24f;
+
+	// create the modular inventory store (holds keys today, other items later)
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
 void AHorrorCharacter::BeginPlay()
@@ -566,17 +570,18 @@ void AHorrorCharacter::ExitHiding(const FTransform& RestoreTransform)
 
 bool AHorrorCharacter::HasKey(FName KeyID) const
 {
-	return CollectedKeys.Contains(KeyID);
+	return Inventory->HasItem(KeyID);
 }
 
 void AHorrorCharacter::AddKey(FName KeyID)
 {
-	if (CollectedKeys.Contains(KeyID))
+	// Keys are unique: skip (and don't re-broadcast) if we already hold this one.
+	if (Inventory->HasItem(KeyID))
 	{
 		return;
 	}
 
-	CollectedKeys.Add(KeyID);
+	Inventory->AddItem(KeyID, 1);
 	OnKeyCollected.Broadcast(KeyID);
 }
 
@@ -654,7 +659,7 @@ void AHorrorCharacter::SaveProgress(const FString& SlotName, int32 UserIndex)
 		return;
 	}
 
-	SaveGameInstance->CollectedKeys = CollectedKeys;
+	SaveGameInstance->InventoryItems = Inventory->GetItems();
 	SaveGameInstance->CollectedNoteIDs = CollectedNoteIDs;
 	SaveGameInstance->NoiseDecoyCount = NoiseDecoyCount;
 	SaveGameInstance->BarricadeMaterialCount = BarricadeMaterialCount;
@@ -680,7 +685,7 @@ bool AHorrorCharacter::LoadProgress(const FString& SlotName, int32 UserIndex)
 		return false;
 	}
 
-	CollectedKeys = SaveGameInstance->CollectedKeys;
+	Inventory->SetItems(SaveGameInstance->InventoryItems);
 	CollectedNoteIDs = SaveGameInstance->CollectedNoteIDs;
 	NoiseDecoyCount = SaveGameInstance->NoiseDecoyCount;
 	BarricadeMaterialCount = SaveGameInstance->BarricadeMaterialCount;

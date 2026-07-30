@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "My_Content/Inventory/InventoryTypes.h"
 #include "HorrorSaveGame.generated.h"
 
 /**
@@ -16,8 +17,9 @@ class SCARYGAME_API UHorrorSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
+	/** Everything held in the player's inventory component, saved generically as ID+count stacks (keys today, more later) */
 	UPROPERTY(VisibleAnywhere, Category = "Save")
-	TArray<FName> CollectedKeys;
+	TArray<FInventoryItemStack> InventoryItems;
 
 	UPROPERTY(VisibleAnywhere, Category = "Save")
 	TArray<FName> CollectedNoteIDs;

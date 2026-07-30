@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "NoiseDecoyProjectile.h"
+#include "My_Content/Items/NoiseDecoyProjectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "TimerManager.h"

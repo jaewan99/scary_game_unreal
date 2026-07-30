@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "IInteractable.h"
+#include "My_Content/Interaction/IInteractable.h"
 #include "SequenceLock.generated.h"
 
 class UStaticMeshComponent;

@@ -90,7 +90,7 @@ protected:
 
 	/** Passes control to Blueprint to show a collected lore note (e.g. a toast or journal update) */
 	UFUNCTION(BlueprintImplementableEvent, Category="Horror", meta = (DisplayName = "Lore Note Collected"))
-	void BP_LoreNoteCollected(FName NoteID, FText NoteText);
+	void BP_LoreNoteCollected(FName NoteID, const FText& NoteText);
 
 	/** Passes control to Blueprint to update the grab escape meter widgets */
 	UFUNCTION(BlueprintImplementableEvent, Category="Horror", meta = (DisplayName = "Grab Meter Updated"))

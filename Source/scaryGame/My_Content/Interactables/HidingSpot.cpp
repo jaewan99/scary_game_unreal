@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "HidingSpot.h"
+#include "My_Content/Interactables/HidingSpot.h"
 #include "Components/StaticMeshComponent.h"
 #include "Variant_Horror/HorrorCharacter.h"
 

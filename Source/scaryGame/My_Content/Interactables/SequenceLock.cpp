@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SequenceLock.h"
+#include "My_Content/Interactables/SequenceLock.h"
 #include "Components/StaticMeshComponent.h"
 
 ASequenceLock::ASequenceLock()

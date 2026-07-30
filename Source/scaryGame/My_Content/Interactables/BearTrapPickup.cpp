@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BearTrapPickup.h"
+#include "My_Content/Interactables/BearTrapPickup.h"
 #include "Components/StaticMeshComponent.h"
 #include "Variant_Horror/HorrorCharacter.h"
 

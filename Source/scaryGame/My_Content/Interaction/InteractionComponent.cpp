@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "InteractionComponent.h"
-#include "IInteractable.h"
+#include "My_Content/Interaction/InteractionComponent.h"
+#include "My_Content/Interaction/IInteractable.h"
 #include "CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "EnhancedInputComponent.h"
